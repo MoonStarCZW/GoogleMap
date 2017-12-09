@@ -1,0 +1,33 @@
+body {
+    background-color: #eeeeee;
+}
+
+#map {
+    margin: 0 auto;
+    width: 1024px;
+    height: 768px;
+    border: 1px solid black;
+}
+
+#buttons {
+    width: 1024px;
+    margin: 35px auto 25px auto;
+    text-align: center;
+}
+
+.label {
+    font-size: 15px;
+}
+
+hr {
+    color: #000;
+}
+
+#bottom {
+    margin-top: 5px;
+    text-align: center;
+    font-size: 15px;
+    color: black;
+    font-family: "Times New Roman", serif;
+    font-weight: bold;
+}

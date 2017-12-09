@@ -3,44 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
-    <!-- link to external Vue.js -->
+
+    <link rel="stylesheet" href="css.css"/>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <!-- Vue.js -->
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <!-- Google Map -->
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBzE9xAESye6Kde-3hT-6B90nfwUkcS8Yw"></script>
-    <style>
-        #map {
-            margin: 0 auto;
-            width: 1024px;
-            height: 768px;
-            border: 1px solid black;
-        }
-    </style>
 </head>
 <body>
 
-<div id="app">
-    <p v-for="location in locations"> {{ location }}</p>
+<div id="top">
+    <div id="buttons" class="row">
+        <div class="col-xs-6 col-sm-3" v-for="location in locations">
+            <button type="button" class="btn btn-danger btn-md" v-model="location" @click="toLocation($e)">
+                <span class="label">{{location.label}}</span><br/>
+                Latitude:&nbsp;{{location.latitude}}<br/>
+                Longitude:&nbsp;{{location.longitude}}
+            </button>
+        </div>
+    </div>
     <div id="map"></div>
+</div>
+<div id="bottom">
+    <p>By Zhiwei Chu<br/>
+        Northeastern University, Shenyang, China</p>
 </div>
 
 <script>
     var app = new Vue({
-        el: '#app',
+        el: '#top',
         data: {
             map: null,
             locations: [
                 {
+                    "label": "A",
                     "latitude": 41.885080,
                     "longitude": -87.624135
                 },
                 {
+                    "label": "B",
                     "latitude": 41.831008,
                     "longitude": -88.010101
                 },
                 {
+                    "label": "C",
                     "latitude": 42.139287,
                     "longitude": -88.056793
                 },
                 {
+                    "label": "D",
                     "latitude": 42.002685,
                     "longitude": -86.392365
                 }
@@ -60,24 +80,51 @@
                     center: this.points[0]
                 });
             },
-            addMarkers: function () {
+            showMarkers: function () {
                 for (var i = 0; i < this.points.length; i++) {
                     var marker = new google.maps.Marker({
                         position: this.points[i],
-                        map: this.map
+                        map: this.map,
+                        animation: google.maps.Animation.DROP,
+                        label: this.locations[i].label
                     });
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: "Latitude: " + this.locations[i].latitude + "<br/>Longitude: " + this.locations[i].longitude
+                    });
+                    infoWindow.open(this.map, marker);
                     this.markers.push(marker);
                 }
+
                 this.bounds = new google.maps.LatLngBounds();
                 for (i = 0; i < this.markers.length; i++) {
                     this.bounds.extend(this.markers[i].getPosition());
                 }
                 this.map.fitBounds(this.bounds);
+            },
+            addMarkers: function () {
+
+            },
+            removeMarkers: function (index) {
+                this.points.splice(2, 1);
+                this.showMarkers();
+            },
+            toLocation: function (e) {
+                alert(e.currentTarget);
+                // google.maps.event.addListener(marker, 'click', function () {
+                //     this.map.setZoom(15);
+                //     this.map.setCenter(marker.getPosition());
+                // });
+                // this.map = new google.maps.Map(document.getElementById("map"), {
+                //     zoom: 12,
+                //     mapTypeId: google.maps.MapTypeId.ROADMAP,
+                //     center: this.points[0]
+                // });
             }
         }
     });
     app.initMap();
-    app.addMarkers();
+    // app.removeMarkers();
+    app.showMarkers();
 
 </script>
 
