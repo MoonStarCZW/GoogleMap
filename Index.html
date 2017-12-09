@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <!-- link to external Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBzE9xAESye6Kde-3hT-6B90nfwUkcS8Yw"></script>
+    <style>
+        #map {
+            margin: 0 auto;
+            width: 1024px;
+            height: 768px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <p v-for="location in locations"> {{ location }}</p>
+    <div id="map"></div>
+</div>
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            map: null,
+            locations: [
+                {
+                    "latitude": 41.885080,
+                    "longitude": -87.624135
+                },
+                {
+                    "latitude": 41.831008,
+                    "longitude": -88.010101
+                },
+                {
+                    "latitude": 42.139287,
+                    "longitude": -88.056793
+                },
+                {
+                    "latitude": 42.002685,
+                    "longitude": -86.392365
+                }
+            ],
+            points: [],
+            markers: [],
+            bounds: null
+        },
+        methods: {
+            initMap: function () {
+                for (var i = 0; i < this.locations.length; i++) {
+                    this.points[i] = new google.maps.LatLng(this.locations[i].latitude, this.locations[i].longitude);
+                }
+                this.map = new google.maps.Map(document.getElementById("map"), {
+                    zoom: 12,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    center: this.points[0]
+                });
+            },
+            addMarkers: function () {
+                for (var i = 0; i < this.points.length; i++) {
+                    var marker = new google.maps.Marker({
+                        position: this.points[i],
+                        map: this.map
+                    });
+                    this.markers.push(marker);
+                }
+                this.bounds = new google.maps.LatLngBounds();
+                for (i = 0; i < this.markers.length; i++) {
+                    this.bounds.extend(this.markers[i].getPosition());
+                }
+                this.map.fitBounds(this.bounds);
+            }
+        }
+    });
+    app.initMap();
+    app.addMarkers();
+
+</script>
+
+</body>
+</html>
