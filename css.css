@@ -2,6 +2,13 @@ body {
     background-color: #eeeeee;
 }
 
+#title {
+    display: block;
+    text-align: center;
+    font-family: "Segoe UI", serif;
+    font-size: 20px;
+}
+
 #map {
     margin: 0 auto;
     width: 1024px;
@@ -11,12 +18,16 @@ body {
 
 #buttons {
     width: 1024px;
-    margin: 35px auto 25px auto;
+    margin: 10px auto 20px auto;
     text-align: center;
 }
 
-.label {
+#label {
     font-size: 15px;
+    font-weight: bold;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 hr {
